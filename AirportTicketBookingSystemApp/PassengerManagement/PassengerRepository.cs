@@ -36,7 +36,6 @@ namespace AirportTicketBookingSystemApp.PassengerManagement
                 .Any(value => value.Equals(email) && !string.IsNullOrEmpty(value));
             }
         }
-
         public OperationResult CheckPassengerInfo(string email, string password)
         {
             using (var reader = new StreamReader($"{_directory}{_usersFileName}"))
@@ -48,7 +47,7 @@ namespace AirportTicketBookingSystemApp.PassengerManagement
 
                 if (passenger != null)
                 {
-                    return OperationResult.SuccessResult("Passenger found.");
+                    return OperationResult.SuccessDataMessage("Passenger found.", passenger);
                 }
                 else
                 {
