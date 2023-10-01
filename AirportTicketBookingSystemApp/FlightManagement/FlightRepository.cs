@@ -1,35 +1,41 @@
 ﻿using CsvHelper;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AirportTicketBookingSystemApp.FlightManagement
 {
     public class FlightRepository
     {
-        public List<Flight> UploadFlights(string path)
+        private List<Flight> _systemFlights = new List<Flight>();
+        public void LoadFlights(string path)
         {
-            List<Flight> flights;
+            List<Flight> flights = new List<Flight>(); ;
             try
             {
                 using (var reader = new StreamReader(path))
                 {
                     using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
                     {
-                        flights = csv.GetRecords<Flight>().ToList();
+                        _systemFlights = csv.GetRecords<Flight>().ToList();
                     }
-
                 }
             }
             catch (IOException)
             {
-                Console.WriteLine("no such file");
-                flights = new List<Flight>();
+                Console.WriteLine("problem when trying to read the file");
             }
-            return flights;
+        }
+
+        public async Task LoadFligtsAsync(string path)
+        {
+            await Task.Run(() =>
+            {
+               LoadFlights(path);
+            });
+        }
+
+        public List<Flight> SystemFlights
+        {
+            get => _systemFlights;
         }
     }
 }

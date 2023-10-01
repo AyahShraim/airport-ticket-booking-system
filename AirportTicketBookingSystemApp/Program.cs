@@ -1,9 +1,23 @@
-﻿using AirportTicketBookingSystemApp.Enums;
+﻿using AirportTicketBookingSystemApp.Commands_UI;
+using AirportTicketBookingSystemApp.Enums;
+using AirportTicketBookingSystemApp.FlightManagement;
+using AirportTicketBookingSystemApp.Interfaces;
+using AirportTicketBookingSystemApp.PassengerManagement;
 using AirportTicketBookingSystemApp.UI_s_Commands;
 
 PrintWelcome();
-StartTickectBookingConsoleApp();
 
+List<Flight> systemFlights = new List<Flight>();
+FlightRepository flightRepository = new FlightRepository();
+Dictionary<PassengerMenuOptions, IPassengerMenuCommands> passengerMenuCommands = new();
+Initilization();
+StartTickectBookingConsoleApp();
+void Initilization()
+{
+    LoadSystemFlightsync(flightRepository);
+    CommandsInitilization();
+
+}
 
 void PrintWelcome()
 {
@@ -29,6 +43,15 @@ void PrintWelcome()
     Console.WriteLine("Press any key to start!");
     Console.ReadLine();
     Console.Clear();
+}
+void CommandsInitilization()
+{
+    passengerMenuCommands = new Dictionary<PassengerMenuOptions, IPassengerMenuCommands>
+    {
+          { PassengerMenuOptions.SearchFlight,new SearchFlightCommand(systemFlights) },
+    };
+
+
 }
 void StartTickectBookingConsoleApp()
 {
@@ -61,16 +84,20 @@ void HandleMainMenuSelection()
         switch (selected)
         {
             case MainMenuOptions.Register:
-
                 passengerAccountUI.RegisterPassenger();
                 break;
 
             case MainMenuOptions.Login:
                 bool valid = passengerAccountUI.PassengerLogIn();
-                if (valid) StartPssengerServicesConsole();
+                if (valid)
+                {
+                    StartPssengerServicesConsole(passengerAccountUI.CurrentPassenger);
+                }
                 break;
 
             case MainMenuOptions.ManagerServices:
+                //    Console.WriteLine(PassengerAccountUI._currentPassenger.FirstName);      
+
                 break;
 
             case MainMenuOptions.Exit:
@@ -80,6 +107,7 @@ void HandleMainMenuSelection()
                 break;
         }
         StartTickectBookingConsoleApp();
+
     }
     else
     {
@@ -87,23 +115,55 @@ void HandleMainMenuSelection()
         StartTickectBookingConsoleApp();
     }
 }
-void StartPssengerServicesConsole()
+void LoadSystemFlightsync(FlightRepository flightRepository)
 {
-    Console.WriteLine($"Welcome {PassengerAccountUI._currentPassenger.FirstName}");
-    PrintPassengerServicesConsole();
+    string directory = @"C:\Users\DELL\source\repos\AirportTicketBookingSystem\AirportTicketBookingSystemApp\Data\";
+    string flightsFileName = "system_flights.csv";
+    string path = $"{directory}{flightsFileName}";
+    flightRepository.LoadFlights(path);
+    systemFlights = flightRepository.SystemFlights;
 }
+
+void StartPssengerServicesConsole(Passenger currentPassenger)
+{
+    Console.WriteLine($"Welcome {currentPassenger.FirstName} {currentPassenger.LastName}");
+    PrintPassengerServicesConsole();
+
+}
+
+
 void PrintPassengerServicesConsole()
 {
     Console.WriteLine(@"
-|-------------------------|
-|Select an action to start|
+
+| What do you want to do? |
 |-------------------------|
 
 ");
-    Console.WriteLine("1.View All flights");
-    Console.WriteLine("2.Search a flight");
-    Console.WriteLine("3.Book flight");
-    Console.WriteLine("4.Manage BooKings");
-    Console.WriteLine("5.Log out");
+    Console.WriteLine("1.Search a flight");
+    Console.WriteLine("2.Book flight");
+    Console.WriteLine("3.Manage Bookings");
+    Console.WriteLine("4.Log out");
     Console.WriteLine("0.Exit");
+
+    HandlePassengerServicesSelection();
+}
+void HandlePassengerServicesSelection()
+{
+
+    Console.WriteLine("Your Selection");
+    string? userSelection = Console.ReadLine();
+    int selection;
+    if (int.TryParse(userSelection, out selection))
+    {
+        PassengerMenuOptions selected = (PassengerMenuOptions)selection;
+        passengerMenuCommands[selected].Execute();
+        PrintPassengerServicesConsole();
+    }
+    else
+    {
+        Console.WriteLine("not valid choice");
+
+    }
+
 }

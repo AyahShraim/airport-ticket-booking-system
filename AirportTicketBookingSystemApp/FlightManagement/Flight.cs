@@ -1,9 +1,4 @@
 ﻿using CsvHelper.Configuration.Attributes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AirportTicketBookingSystemApp.FlightManagement
 {
@@ -77,6 +72,9 @@ namespace AirportTicketBookingSystemApp.FlightManagement
 
         [Name("First Class Available")]
         public int FirstClassAvailable { get; set; }
+
+        [Name("Currency")]
+        public string Currency { get; set; } = string.Empty;
 
     }
 }
