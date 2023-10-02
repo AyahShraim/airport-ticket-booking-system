@@ -79,14 +79,13 @@ namespace AirportTicketBookingSystemApp.PassengerManagement
             bool isAvailable = _flightServices.FlightClassSeatAvailable(flight, flightClassType);
             if (!isAvailable)
             {
-                return OperationResult.FailureResult("No Availabe seats");
+                return OperationResult.FailureResult("\nNo Availabe seats");
             }
 
             FlightBookingModel flightBookingModel = new(flight.Number, email, flightClassType, price);
             _bookingRepository.AddNewBooking(flightBookingModel);
             _flightRepository.DecreaseAvailableSeats(flight.Number, flightClassType);
-
-            return OperationResult.SuccessResult("your booking set succefully }");
+            return OperationResult.SuccessDataMessage("\nyour booking set succefully! ", flightBookingModel.BookingNumber);
         }
     }
 }

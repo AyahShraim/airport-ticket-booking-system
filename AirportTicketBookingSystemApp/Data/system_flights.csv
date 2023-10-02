@@ -1,5 +1,5 @@
 Flight Number,Airline,Dep Country,Dep Airport,Dep Date,Dep Time,Dep Day,Arrival Country,Arrival Airport,Arrival Date,Arrival Time,Arrival Day,Duration,Capacity,Economy Price,Economy Capacity,Economy Available,Business Price,Business Capacity,Business Available,First Class Price,First Class Capacity,First Class Available,Currency
-11,na,aaa,pp,12/10/2023 00:00:00,10/02/2023 12:00:00,Sunday,qq,uu,12/10/2023 00:00:00,10/02/2023 02:00:00,Tuesday,02:10:00,40,40,10,0,200,101,1,200000,10,-10,dollar
+11,na,aaa,pp,12/10/2023 00:00:00,10/02/2023 12:00:00,Sunday,qq,uu,12/10/2023 00:00:00,10/02/2023 02:00:00,Tuesday,02:10:00,40,40,10,0,200,101,0,200000,10,-10,dollar
 1211,fe,bbb,kk,12/12/2023 00:00:00,10/02/2023 12:00:00,Sunday,ccc,tt,12/10/2023 00:00:00,10/02/2023 02:00:00,Tuesday,02:10:00,30,30,10,-10,2000,101,0,100000,10,0,dollar
 14,ra,sss,kk,12/10/2023 00:00:00,10/02/2023 12:00:00,Sunday,xx,hh,12/10/2023 00:00:00,10/02/2023 02:00:00,Tuesday,02:10:00,100,100,10,0,1000,101,-10,600000,10,0,dollar
 15,za,ddd,mm,12/10/2023 00:00:00,10/02/2023 12:00:00,Sunday,ee,gg,12/10/2023 00:00:00,10/02/2023 02:00:00,Tuesday,02:10:00,50,50,10,4,3000,101,0,900000,10,10,dollar
