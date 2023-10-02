@@ -47,8 +47,9 @@ void CommandsInitilization()
 {
     passengerMenuCommands = new Dictionary<PassengerMenuOptions, IPassengerMenuCommands>
     {
-          { PassengerMenuOptions.SearchFlight,new SearchFlightCommand(systemFlights) },
-          { PassengerMenuOptions.BookFlight,new BookingFlightCommand(systemFlights,passengerAccountUI.CurrentPassenger) }
+          {PassengerMenuOptions.SearchFlight,new SearchFlightCommand(systemFlights)},
+          {PassengerMenuOptions.BookFlight,new BookingFlightCommand(systemFlights,passengerAccountUI.CurrentPassenger)},
+          {PassengerMenuOptions.ViewBookings,new ViewPersonalBookingsCommand(passengerAccountUI.CurrentPassenger,systemFlights)}
     };
 }
 void StartTickectBookingConsoleApp()
@@ -129,8 +130,9 @@ void PrintPassengerServicesConsole()
 ");
     Console.WriteLine("1.Search a flight");
     Console.WriteLine("2.Book flight");
-    Console.WriteLine("3.Manage Bookings");
-    Console.WriteLine("4.Log out");
+    Console.WriteLine("3.View personal Bookings");
+    Console.WriteLine("4.Edit Booking");
+    Console.WriteLine("5.Cancel Booking");
     Console.WriteLine("0.Exit");
     HandlePassengerServicesSelection();
 }
