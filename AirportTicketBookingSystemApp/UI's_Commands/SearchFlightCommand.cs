@@ -26,8 +26,7 @@ namespace AirportTicketBookingSystemApp.Commands_UI
 7.Price                     0.Finish
 
 ");
-        }
-        
+        }  
         private bool IsValidString(string text)
         {
             return !string.IsNullOrEmpty(text);
@@ -101,7 +100,6 @@ namespace AirportTicketBookingSystemApp.Commands_UI
                     parameters.Add(key.ToString(), departureDtae);
                 }
         }
-
         public void Execute()
         {
             PrintSearchMenu();
@@ -126,12 +124,9 @@ namespace AirportTicketBookingSystemApp.Commands_UI
             {
                 _systemFlights = passengerServices.SearchFlight(_flights, parameters);
                 PrintSearchResult(_systemFlights);
-            }
-            
-            
+            }      
            
             _systemFlights.Clear();
-
         }
     }
 }

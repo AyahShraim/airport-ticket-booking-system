@@ -1,4 +1,5 @@
-﻿using AirportTicketBookingSystemApp.Commands_UI;
+﻿using AirportTicketBookingSystemApp;
+using AirportTicketBookingSystemApp.Commands_UI;
 using AirportTicketBookingSystemApp.Enums;
 using AirportTicketBookingSystemApp.FlightManagement;
 using AirportTicketBookingSystemApp.Interfaces;
@@ -117,9 +118,7 @@ void HandleMainMenuSelection()
 }
 void LoadSystemFlightsync(FlightRepository flightRepository)
 {
-    string directory = @"C:\Users\DELL\source\repos\AirportTicketBookingSystem\AirportTicketBookingSystemApp\Data\";
-    string flightsFileName = "system_flights.csv";
-    string path = $"{directory}{flightsFileName}";
+    string path = Utilities.SystemFlightsPath;
     flightRepository.LoadFlights(path);
     systemFlights = flightRepository.SystemFlights;
 }
