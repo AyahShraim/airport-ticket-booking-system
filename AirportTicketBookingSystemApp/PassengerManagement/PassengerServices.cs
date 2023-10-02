@@ -3,12 +3,24 @@
 using AirportTicketBookingSystemApp.Enums;
 using AirportTicketBookingSystemApp.FlightManagement;
 using AirportTicketBookingSystemApp.Interfaces;
+using AirportTicketBookingSystemApp.ResultHandler;
 using AirportTicketBookingSystemApp.Services.SearchService;
 
 namespace AirportTicketBookingSystemApp.PassengerManagement
 {
     public class PassengerServices
     {
+        private BookingRepository _bookingRepository;
+        private FlightRepository _flightRepository;
+        private FlightServices _flightServices;
+
+        public PassengerServices()
+        {
+            _bookingRepository = new();
+            _flightRepository = new();
+            _flightServices = new();
+        }
+
         private List<ISearchCriteria<Flight>> SearchCriteria(Dictionary<string, object> parameters)
         {
             List<ISearchCriteria<Flight>> searchCriteria = new List<ISearchCriteria<Flight>>();
@@ -60,6 +72,21 @@ namespace AirportTicketBookingSystemApp.PassengerManagement
             List<Flight> filteredFlights = new List<Flight>(flights);
             filteredFlights = flights.Where(flight => searchCriterias.All(criteria => criteria.ApplyFilter(flight))).ToList();
             return filteredFlights;
+        }
+
+        public OperationResult BookingFlight(Flight flight, FlightClassType flightClassType, string email, double price)
+        {
+            bool isAvailable = _flightServices.FlightClassSeatAvailable(flight, flightClassType);
+            if (!isAvailable)
+            {
+                return OperationResult.FailureResult("No Availabe seats");
+            }
+
+            FlightBookingModel flightBookingModel = new(flight.Number, email, flightClassType, price);
+            _bookingRepository.AddNewBooking(flightBookingModel);
+            _flightRepository.DecreaseAvailableSeats(flight.Number, flightClassType);
+
+            return OperationResult.SuccessResult("your booking set succefully }");
         }
     }
 }

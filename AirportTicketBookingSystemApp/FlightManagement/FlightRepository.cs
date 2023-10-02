@@ -1,11 +1,12 @@
-﻿using CsvHelper;
+﻿using AirportTicketBookingSystemApp.Enums;
+using CsvHelper;
 using System.Globalization;
 
 namespace AirportTicketBookingSystemApp.FlightManagement
 {
     public class FlightRepository
     {
-        private List<Flight> _systemFlights = new List<Flight>();
+        private static List<Flight> _systemFlights = new List<Flight>();
         public void LoadFlights(string path)
         {
             List<Flight> flights = new List<Flight>(); ;
@@ -29,7 +30,7 @@ namespace AirportTicketBookingSystemApp.FlightManagement
         {
             await Task.Run(() =>
             {
-               LoadFlights(path);
+                LoadFlights(path);
             });
         }
 
@@ -37,5 +38,27 @@ namespace AirportTicketBookingSystemApp.FlightManagement
         {
             get => _systemFlights;
         }
+
+        public void DecreaseAvailableSeats(int flightNumber, FlightClassType flightClass)
+        {
+            int flightIndex = _systemFlights.FindIndex(flight => flight.Number == flightNumber);
+            switch (flightClass)
+            {
+                case FlightClassType.FirstClass:
+                    _systemFlights[flightIndex].FirstClassAvailable--;
+                    break;
+                case FlightClassType.Economy:
+                    _systemFlights[flightIndex].EconomiyAvailable--;
+                    break;
+                case FlightClassType.Business:
+                    _systemFlights[flightIndex].BusinessAvailable--;
+                    break;
+            }
+
+            using var writer = new StreamWriter(Utilities.SystemFlightsPath);
+            using var csvWriter = new CsvWriter(writer, CultureInfo.InvariantCulture);
+            csvWriter.WriteRecords(_systemFlights);
+        }
+
     }
 }

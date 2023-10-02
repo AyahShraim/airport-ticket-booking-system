@@ -11,7 +11,7 @@ PrintWelcome();
 List<Flight> systemFlights = new List<Flight>();
 FlightRepository flightRepository = new FlightRepository();
 Dictionary<PassengerMenuOptions, IPassengerMenuCommands> passengerMenuCommands = new();
-Initilization();
+PassengerAccountUI passengerAccountUI = new();
 StartTickectBookingConsoleApp();
 void Initilization()
 {
@@ -50,6 +50,7 @@ void CommandsInitilization()
     passengerMenuCommands = new Dictionary<PassengerMenuOptions, IPassengerMenuCommands>
     {
           { PassengerMenuOptions.SearchFlight,new SearchFlightCommand(systemFlights) },
+          { PassengerMenuOptions.BookFlight,new BookingFlightCommand(systemFlights,passengerAccountUI.CurrentPassenger) }
     };
 
 
@@ -81,7 +82,6 @@ void HandleMainMenuSelection()
     if (int.TryParse(userSelection, out selection))
     {
         MainMenuOptions selected = (MainMenuOptions)selection;
-        PassengerAccountUI passengerAccountUI = new();
         switch (selected)
         {
             case MainMenuOptions.Register:
@@ -92,6 +92,7 @@ void HandleMainMenuSelection()
                 bool valid = passengerAccountUI.PassengerLogIn();
                 if (valid)
                 {
+                    Initilization();
                     StartPssengerServicesConsole(passengerAccountUI.CurrentPassenger);
                 }
                 break;
@@ -118,7 +119,9 @@ void HandleMainMenuSelection()
 }
 void LoadSystemFlightsync(FlightRepository flightRepository)
 {
-    string path = Utilities.SystemFlightsPath;
+    string directory = @"C:\Users\DELL\source\repos\AirportTicketBookingTry\Data\";
+    string flightsFileName = "system_flights.csv";
+    string path = $"{directory}{flightsFileName}";
     flightRepository.LoadFlights(path);
     systemFlights = flightRepository.SystemFlights;
 }
@@ -164,5 +167,4 @@ void HandlePassengerServicesSelection()
         Console.WriteLine("not valid choice");
 
     }
-
 }
