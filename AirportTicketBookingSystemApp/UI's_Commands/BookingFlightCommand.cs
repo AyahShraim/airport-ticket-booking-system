@@ -12,8 +12,6 @@ namespace AirportTicketBookingSystemApp.Commands_UI
         private List<Flight> _systemFlights;
         private PassengerServices passengerServices = new();
         private Passenger _currentPassenger;
-        private static string _directory = @"C:\Users\DELL\source\repos\AirportTicketBookingTry\Data\";
-        private static string _bookingsFileName = "bookings.csv";
 
         public BookingFlightCommand(List<Flight> systemFlights,Passenger passenger)
         {
@@ -27,12 +25,11 @@ namespace AirportTicketBookingSystemApp.Commands_UI
             Console.WriteLine("2.Business");
             Console.WriteLine("3.First Class");
         }
-        private Flight ValidFlightNumber()
+        private Flight? ValidFlightNumber()
         {
             Console.WriteLine("Enter the flight number:");
             string flightNumber = Console.ReadLine() ?? string.Empty;
-            return _systemFlights.First(flight => flight.Number.ToString().Equals(flightNumber));
-            
+            return _systemFlights.FirstOrDefault(flight => flight.Number.ToString().Equals(flightNumber));
         }
         public void Execute()
         {
@@ -57,7 +54,6 @@ namespace AirportTicketBookingSystemApp.Commands_UI
                     return;
                 }
             }
-
         }
     }
 }

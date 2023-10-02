@@ -6,7 +6,11 @@ namespace AirportTicketBookingSystemApp.UI_s_Commands
 {
     public class PassengerAccountUI
     {
-        private PassengerRepository _passengerRepository = new();
+        private PassengerRepository _passengerRepository;
+        public PassengerAccountUI()
+        {
+            _passengerRepository = new();
+        }
         public Passenger CurrentPassenger { get; private set; } = new();
 
         public void RegisterPassenger()
@@ -44,10 +48,10 @@ namespace AirportTicketBookingSystemApp.UI_s_Commands
         }
         public bool PassengerLogIn()
         {
-            Console.Write("Enter your email:");
+            Console.Write("Enter your email: ");
             string email = Console.ReadLine() ?? string.Empty;
 
-            Console.Write("Enter you password");
+            Console.Write("Enter you password: ");
             string password = Console.ReadLine() ?? string.Empty;
             OperationResult operationResult = _passengerRepository.CheckPassengerInfo(email, password);
             Console.WriteLine(operationResult.Message);
@@ -57,6 +61,5 @@ namespace AirportTicketBookingSystemApp.UI_s_Commands
             }
             return operationResult.IsSuccess;
         }
-
     }
 }

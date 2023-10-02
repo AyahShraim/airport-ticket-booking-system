@@ -17,9 +17,7 @@ void Initilization()
 {
     LoadSystemFlightsync(flightRepository);
     CommandsInitilization();
-
 }
-
 void PrintWelcome()
 {
     Console.ForegroundColor = ConsoleColor.Yellow;
@@ -52,14 +50,11 @@ void CommandsInitilization()
           { PassengerMenuOptions.SearchFlight,new SearchFlightCommand(systemFlights) },
           { PassengerMenuOptions.BookFlight,new BookingFlightCommand(systemFlights,passengerAccountUI.CurrentPassenger) }
     };
-
-
 }
 void StartTickectBookingConsoleApp()
 {
     PrintMainMenuOptions();
     HandleMainMenuSelection();
-
 }
 void PrintMainMenuOptions()
 {
@@ -98,8 +93,6 @@ void HandleMainMenuSelection()
                 break;
 
             case MainMenuOptions.ManagerServices:
-                //    Console.WriteLine(PassengerAccountUI._currentPassenger.FirstName);      
-
                 break;
 
             case MainMenuOptions.Exit:
@@ -109,7 +102,6 @@ void HandleMainMenuSelection()
                 break;
         }
         StartTickectBookingConsoleApp();
-
     }
     else
     {
@@ -119,21 +111,14 @@ void HandleMainMenuSelection()
 }
 void LoadSystemFlightsync(FlightRepository flightRepository)
 {
-    string directory = @"C:\Users\DELL\source\repos\AirportTicketBookingTry\Data\";
-    string flightsFileName = "system_flights.csv";
-    string path = $"{directory}{flightsFileName}";
-    flightRepository.LoadFlights(path);
+    flightRepository.LoadFlights(Utilities.SystemFlightsPath);
     systemFlights = flightRepository.SystemFlights;
 }
-
 void StartPssengerServicesConsole(Passenger currentPassenger)
 {
     Console.WriteLine($"Welcome {currentPassenger.FirstName} {currentPassenger.LastName}");
     PrintPassengerServicesConsole();
-
 }
-
-
 void PrintPassengerServicesConsole()
 {
     Console.WriteLine(@"
@@ -147,24 +132,32 @@ void PrintPassengerServicesConsole()
     Console.WriteLine("3.Manage Bookings");
     Console.WriteLine("4.Log out");
     Console.WriteLine("0.Exit");
-
     HandlePassengerServicesSelection();
 }
 void HandlePassengerServicesSelection()
 {
-
     Console.WriteLine("Your Selection");
     string? userSelection = Console.ReadLine();
     int selection;
     if (int.TryParse(userSelection, out selection))
     {
         PassengerMenuOptions selected = (PassengerMenuOptions)selection;
-        passengerMenuCommands[selected].Execute();
-        PrintPassengerServicesConsole();
+        try
+        {
+            passengerMenuCommands[selected].Execute();
+        }
+        catch
+        { 
+            Console.WriteLine("Not valid choice");
+        }
+        finally
+        {
+            PrintPassengerServicesConsole();
+        }
     }
     else
     {
         Console.WriteLine("not valid choice");
-
+        PrintPassengerServicesConsole();
     }
 }

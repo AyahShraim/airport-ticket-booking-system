@@ -19,7 +19,7 @@ namespace AirportTicketBookingSystemApp.FlightManagement
                     return flight.FirstClassPrice;
 
                 default:
-                    return 0.0;     
+                    return double.NaN;     
             }
         }
     

@@ -15,10 +15,8 @@ namespace AirportTicketBookingSystemApp.PassengerManagement
             }
             using var writer = new StreamWriter(Utilities.UsersFilePath, append: true);
             using var csvWriter = new CsvWriter(writer, CultureInfo.InvariantCulture);
-
             csvWriter.WriteRecord(passenger);
             csvWriter.NextRecord();
-
             return OperationResult.SuccessResult("Account created successfully!");
         }
 
@@ -44,7 +42,7 @@ namespace AirportTicketBookingSystemApp.PassengerManagement
 
                 if (passenger != null)
                 {
-                    return OperationResult.SuccessDataMessage("Passenger found.", passenger);
+                    return OperationResult.SuccessDataMessage("....................", passenger);
                 }
                 else
                 {

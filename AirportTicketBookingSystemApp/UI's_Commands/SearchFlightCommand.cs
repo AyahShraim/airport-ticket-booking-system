@@ -124,8 +124,7 @@ namespace AirportTicketBookingSystemApp.Commands_UI
             {
                 _systemFlights = passengerServices.SearchFlight(_flights, parameters);
                 PrintSearchResult(_systemFlights);
-            }      
-           
+            }       
             _systemFlights.Clear();
         }
     }
