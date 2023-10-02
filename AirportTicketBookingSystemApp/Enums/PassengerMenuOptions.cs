@@ -5,7 +5,7 @@
         BookFlight = 2,
         ViewBookings = 3,
         EditBooking = 4,
-        CancelBookong = 5,
+        CancelBooking = 5,
         Exit = 0,
     }
 }

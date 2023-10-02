@@ -12,7 +12,6 @@ namespace AirportTicketBookingSystemApp.FlightManagement
         {
             _Bookings = new();
         }
-
         public OperationResult AddNewBooking(FlightBookingModel flightBooking)
         {
 
@@ -24,7 +23,7 @@ namespace AirportTicketBookingSystemApp.FlightManagement
 
             return OperationResult.SuccessResult($"Booking set successfully!");
         }
-        public void LoadBookings(string path)
+        public List<FlightBookingModel> LoadBookings(string path)
         {
             try
             {
@@ -40,8 +39,8 @@ namespace AirportTicketBookingSystemApp.FlightManagement
             {
                 Console.WriteLine("problem when trying to read the file");
             }
+            return _Bookings;
         }
-
         public List<FlightBookingModel> ReadBookingsByEmail(string passengerEmail)
         {
             try
@@ -61,6 +60,17 @@ namespace AirportTicketBookingSystemApp.FlightManagement
                 Console.WriteLine("problem when trying to read the file");
             }
             return _Bookings;
+        }
+
+        public OperationResult DeleteBookingByBookingNo(string bookingNumber, List<FlightBookingModel> bookings)
+        {
+            int index = bookings.FindIndex(record => record.BookingNumber.Equals(bookingNumber));
+            if (index == -1) return OperationResult.FailureResult("No such booking!");
+            using var writer = new StreamWriter(Utilities.bookingsFilePath);
+            using var csvWriter = new CsvWriter(writer, CultureInfo.InvariantCulture);
+            bookings.RemoveAt(index);
+            csvWriter.WriteRecords(bookings);
+            return OperationResult.SuccessResult("Deleted succefully!");
         }
     }
 }
