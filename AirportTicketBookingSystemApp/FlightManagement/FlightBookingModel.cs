@@ -7,11 +7,11 @@ namespace AirportTicketBookingSystemApp.FlightManagement
     {
         public FlightBookingModel()
         {
-            BookingNumber = $"{DateTime.Now:yyMMddHHmmssffff}-{Guid.NewGuid():N}";
+
         }
-        public FlightBookingModel(int flightNumber, string email, FlightClassType flightClass, double price, string currency)
+        public FlightBookingModel(int flightNumber, string email, FlightClassType flightClass, double price, string currency, string bookingNumber)
         {
-            BookingNumber = $"{DateTime.Now:yyMMddHHmmssffff}-{Guid.NewGuid():N}";
+            BookingNumber = bookingNumber;
             FlightNumber = flightNumber;
             Email = email;
             Price = price;
@@ -20,7 +20,7 @@ namespace AirportTicketBookingSystemApp.FlightManagement
         }
 
         [Name("Booking Number")]
-        public string BookingNumber { get; private set; }
+        public string BookingNumber { get; set; } = String.Empty;
 
         [Name("Flight Number")]
         public int FlightNumber { get; set; }
@@ -36,6 +36,11 @@ namespace AirportTicketBookingSystemApp.FlightManagement
 
         [Name("Currency")]
         public string Currency { get; set; } = String.Empty;
+
+        public static string GenerateBookingNumber()
+        {
+            return $"{DateTime.Now:yyMMddHHmmssffff}-{Guid.NewGuid():N}";
+        }
     }
 }
 
