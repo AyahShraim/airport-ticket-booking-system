@@ -11,8 +11,10 @@ PrintWelcome();
 List<Flight> systemFlights = new List<Flight>();
 FlightRepository flightRepository = new FlightRepository();
 Dictionary<PassengerMenuOptions, IPassengerMenuCommands> passengerMenuCommands = new();
+Dictionary<ManagerMenuOptions, IManagerMenuCommands> ManagerMenuCommands = new();
 PassengerAccountUI passengerAccountUI = new();
 StartTickectBookingConsoleApp();
+
 void Initilization()
 {
     LoadSystemFlightsync(flightRepository);
@@ -52,6 +54,12 @@ void CommandsInitilization()
           {PassengerMenuOptions.ViewBookings,new ViewPersonalBookingsCommand(passengerAccountUI.CurrentPassenger,systemFlights)},
           {PassengerMenuOptions.CancelBooking,new CancelBookingCommand()}
     };
+
+    ManagerMenuCommands = new Dictionary<ManagerMenuOptions, IManagerMenuCommands>
+    {
+         {ManagerMenuOptions.FilterBookings,new FilterBookingsCommand()},
+         {ManagerMenuOptions.UploadFlights,new UploadFlightsCommand()},
+    };
 }
 void StartTickectBookingConsoleApp()
 {
@@ -68,7 +76,7 @@ void PrintMainMenuOptions()
 ");
     Console.WriteLine("1.Create new account");
     Console.WriteLine("2.Log in");
-    Console.WriteLine("3.Mnager Services");
+    Console.WriteLine("3.Manager Services");
     Console.WriteLine("0.Close Application");
 }
 void HandleMainMenuSelection()
@@ -95,6 +103,7 @@ void HandleMainMenuSelection()
                 break;
 
             case MainMenuOptions.ManagerServices:
+                StartManagerServices();
                 break;
 
             case MainMenuOptions.Exit:
@@ -164,3 +173,59 @@ void HandlePassengerServicesSelection()
         PrintPassengerServicesConsole();
     }
 }
+void StartManagerServices()
+{
+    Console.WriteLine("enter your secret key");
+    string secretKey = Console.ReadLine() ?? string.Empty;
+    if (!secretKey.Equals(Utilities.SecretKey))
+    {
+        Console.WriteLine("not valid secret key");
+        return;
+    }
+    else
+    {
+        Initilization();
+        PrintManagerMenuOptions();
+    }
+}
+void PrintManagerMenuOptions()
+{
+    Console.WriteLine(@"
+|-------------------------|
+|Select an action to start|
+|-------------------------|
+
+");
+    Console.WriteLine("1.Filter Bookings");
+    Console.WriteLine("2.Upload new Files");
+    Console.WriteLine("0.Close Application");
+    HandleManagerMenuSelection();
+}
+void HandleManagerMenuSelection()
+{
+    Console.WriteLine("Your Selection");
+    string? userSelection = Console.ReadLine();
+    int selection;
+    if (int.TryParse(userSelection, out selection))
+    {
+        ManagerMenuOptions selected = (ManagerMenuOptions)selection;
+        try
+        {
+            ManagerMenuCommands[selected].Execute();
+        }
+        catch
+        {
+            Console.WriteLine("Not valid choice");
+        }
+        finally
+        {
+            PrintManagerMenuOptions();
+        }
+    }
+    else
+    {
+        Console.WriteLine("not valid choice");
+        PrintManagerMenuOptions();
+    }
+}
+
