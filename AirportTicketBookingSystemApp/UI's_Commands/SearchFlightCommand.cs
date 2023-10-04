@@ -2,6 +2,7 @@
 using AirportTicketBookingSystemApp.FlightManagement;
 using AirportTicketBookingSystemApp.Interfaces;
 using AirportTicketBookingSystemApp.PassengerManagement;
+using AirportTicketBookingSystemApp.Services.SearchService;
 using System.Text;
 
 namespace AirportTicketBookingSystemApp.Commands_UI
@@ -10,7 +11,7 @@ namespace AirportTicketBookingSystemApp.Commands_UI
     {
         private List<Flight> _flights;
         private  List<Flight> _systemFlights = new();
-        private PassengerServices passengerServices = new();
+        private FilteredSearch _filteredSearch = new();
         public SearchFlightCommand(List<Flight> flights)
         {
             _flights = flights;
@@ -122,7 +123,7 @@ namespace AirportTicketBookingSystemApp.Commands_UI
             if(parameters.Count==0) { Console.WriteLine("No such flight!"); }
             else
             {
-                _systemFlights = passengerServices.SearchFlight(_flights, parameters);
+                _systemFlights = _filteredSearch.SearchFlight(_flights, parameters);
                 PrintSearchResult(_systemFlights);
             }       
             _systemFlights.Clear();

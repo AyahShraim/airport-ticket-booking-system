@@ -10,6 +10,7 @@ PrintWelcome();
 
 List<Flight> systemFlights = new List<Flight>();
 FlightRepository flightRepository = new FlightRepository();
+List<FlightBookingModel> bookings = new();
 Dictionary<PassengerMenuOptions, IPassengerMenuCommands> passengerMenuCommands = new();
 Dictionary<ManagerMenuOptions, IManagerMenuCommands> ManagerMenuCommands = new();
 PassengerAccountUI passengerAccountUI = new();
@@ -18,6 +19,7 @@ StartTickectBookingConsoleApp();
 void Initilization()
 {
     LoadSystemFlightsync(flightRepository);
+    LoadSystemBookings();
     CommandsInitilization();
 }
 void PrintWelcome()
@@ -57,7 +59,7 @@ void CommandsInitilization()
 
     ManagerMenuCommands = new Dictionary<ManagerMenuOptions, IManagerMenuCommands>
     {
-         {ManagerMenuOptions.FilterBookings,new FilterBookingsCommand()},
+         {ManagerMenuOptions.FilterBookings,new FilterBookingsCommand(bookings, systemFlights)},
          {ManagerMenuOptions.UploadFlights,new UploadFlightsCommand()},
     };
 }
@@ -229,3 +231,8 @@ void HandleManagerMenuSelection()
     }
 }
 
+void LoadSystemBookings()
+{
+    BookingRepository bookingRepository = new();
+    bookings = bookingRepository.LoadBookings(Utilities.bookingsFilePath);
+}
