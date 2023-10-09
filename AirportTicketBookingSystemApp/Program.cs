@@ -61,6 +61,7 @@ void CommandsInitilization()
     {
          {ManagerMenuOptions.FilterBookings,new FilterBookingsCommand(bookings, systemFlights)},
          {ManagerMenuOptions.UploadFlights,new UploadFlightsCommand()},
+         {ManagerMenuOptions.ViewFlightValidationDetails,new ViewFlightValidationDetailsCommand()}
     };
 }
 void StartTickectBookingConsoleApp()
@@ -200,6 +201,7 @@ void PrintManagerMenuOptions()
 ");
     Console.WriteLine("1.Filter Bookings");
     Console.WriteLine("2.Upload new Files");
+    Console.WriteLine("3.View flight validation details");
     Console.WriteLine("0.Close Application");
     HandleManagerMenuSelection();
 }

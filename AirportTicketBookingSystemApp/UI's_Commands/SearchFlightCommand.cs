@@ -48,7 +48,7 @@ namespace AirportTicketBookingSystemApp.Commands_UI
             sb.AppendLine("Flight No       Airline     From        To      Departure Airport       Arrival Airport      AtTime     ");
             sb.AppendLine("---------       -------     ----       ----     -----------------       --------------       -----      ");
             flights.ForEach(flight=>
-            sb.AppendLine($"{flight.Number,-16}{flight.Airline,-13}{flight.DepartureCountry,-11}{flight.ArrivalCountry,-9}{flight.DepartureAirport,-25}{flight.ArrivalAirport,-16}{flight.DepartureTime.TimeOfDay,-12}")
+            sb.AppendLine($"{flight.Number,-16}{flight.Airline,-13}{flight.DepartureCountry,-11}{flight.ArrivalCountry,-9}{flight.DepartureAirport,-25}{flight.ArrivalAirport,-16}{flight.DepartureTime,-12}")
             );
             sb.ToString();
             Console.WriteLine(sb.ToString());

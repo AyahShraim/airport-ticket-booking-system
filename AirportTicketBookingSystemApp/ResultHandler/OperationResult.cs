@@ -26,5 +26,9 @@
         {
             return new OperationResult(true, msg, data);
         }
+        public static OperationResult FaiulreDataMessage(string msg, object data)
+        {
+            return new OperationResult(false, msg, data);
+        }
     }
 }

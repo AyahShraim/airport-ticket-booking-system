@@ -1,6 +1,7 @@
 ﻿using AirportTicketBookingSystemApp.Enums;
+using AirportTicketBookingSystemApp.ResultHandler;
 using CsvHelper;
-using System.ComponentModel.DataAnnotations;
+using CsvHelper.TypeConversion;
 using System.Globalization;
 
 namespace AirportTicketBookingSystemApp.FlightManagement
@@ -8,41 +9,73 @@ namespace AirportTicketBookingSystemApp.FlightManagement
     public class FlightRepository
     {
         private static List<Flight> _systemFlights = new List<Flight>();
-        public void LoadFlights(string path)
+        public List<Flight> SystemFlights
         {
-            List<Flight> flights = new List<Flight>(); ;
+            get => _systemFlights;
+
+        }
+        public OperationResult BatchFileUpload(string path)
+        {
+            var systemFlights = LoadFlights(Utilities.SystemFlightsPath);
+            List<Flight> uploadedFlights;
+            string validationErrors = "";
+            try
+            {
+                try
+                {
+                    uploadedFlights = LoadFlights(path);
+                    validationErrors = FlightValidator.ValidateImportedFlights(uploadedFlights);
+                    if (string.IsNullOrEmpty(validationErrors))
+                    {
+                        int maxFlightCount = systemFlights.Count;
+                        foreach (var item in uploadedFlights)
+                        {
+                            item.Number = maxFlightCount++;
+                        }
+                        systemFlights.AddRange(uploadedFlights.ToList());
+                        SaveNewFlightsToSystem(Utilities.SystemFlightsPath, systemFlights);
+                        return OperationResult.SuccessResult("flights added successfully");
+                    }
+                }
+                //TODO: include type conversion in error list
+                catch (TypeConverterException ex)
+                {
+                    validationErrors += $"Error type for {ex.Text} {ex.MemberMapData.Member} {ex.TypeConverter}";
+                }
+               return OperationResult.FaiulreDataMessage("validation errors", validationErrors);
+            }
+            catch (Exception ex)
+            {
+                return OperationResult.FailureResult($"Exception: {ex.Message}");
+            }
+        } 
+        public List<Flight> LoadFlights(string path)
+        {
             try
             {
                 using (var reader = new StreamReader(path))
                 {
                     using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
                     {
-                        _systemFlights = csv.GetRecords<Flight>().ToList();
+                        return  csv.GetRecords<Flight>().ToList();
+                         
                     }
                 }
             }
-            catch (IOException)
+            catch
             {
-                Console.WriteLine("problem when trying to read the file");
+                return new List<Flight>();
             }
         }
-
-        public async Task LoadFligtsAsync(string path)
+        public void SaveNewFlightsToSystem(string path, List<Flight> flights)
         {
-            await Task.Run(() =>
-            {
-                LoadFlights(path);
-            });
+            using var writer = new StreamWriter(path, append: false);
+            using var csvWriter = new CsvWriter(writer, CultureInfo.InvariantCulture);
+            csvWriter.WriteRecords(flights);
         }
-
-        public List<Flight> SystemFlights
+        public void DecreaseAvailableSeats(int flightNumber, FlightClassType flightClass, List<Flight> flights)
         {
-            get => _systemFlights;
-        }
-
-        public void DecreaseAvailableSeats(int flightNumber, FlightClassType flightClass)
-        {
-            int flightIndex = _systemFlights.FindIndex(flight => flight.Number == flightNumber);
+            int flightIndex = flights.FindIndex(flight => flight.Number == flightNumber);
             switch (flightClass)
             {
                 case FlightClassType.FirstClass:
@@ -55,66 +88,7 @@ namespace AirportTicketBookingSystemApp.FlightManagement
                     _systemFlights[flightIndex].BusinessAvailable--;
                     break;
             }
-
-            using var writer = new StreamWriter(Utilities.SystemFlightsPath);
-            using var csvWriter = new CsvWriter(writer, CultureInfo.InvariantCulture);
-            csvWriter.WriteRecords(_systemFlights);
+            SaveNewFlightsToSystem(Utilities.SystemFlightsPath, flights);
         }
-
-        public void BatchFlightUpload(string path)
-        {
-            try
-            {
-                LoadFlights(Utilities.SystemFlightsPath);
-                using (var reader = new StreamReader(path))
-                using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
-                {
-                    var newFlights = csv.GetRecords<Flight>().ToList();
-                    var isValid = true;
-
-                    foreach (var flight in newFlights)
-                    {
-                        Console.WriteLine($"Validating Flight {flight.Number}");
-                        var validationContext = new ValidationContext(flight, null, null);
-                        var validationResults = new List<ValidationResult>();
-
-                        if (!Validator.TryValidateObject(flight, validationContext, validationResults, true))
-                        {
-                            Console.WriteLine($"Validation Errors for Flight {flight.Number}:");
-                            foreach (var result in validationResults)
-                            {
-                                Console.WriteLine($" - {result.ErrorMessage}");
-                            }
-
-                            isValid = false;
-                        }
-                    }
-
-                    if (isValid)
-                    {
-                        _systemFlights.AddRange(newFlights);
-                        AppendflightstoFile(Utilities.SystemFlightsPath);
-                        Console.WriteLine("Flights added Successfully");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Check the erorr list.");
-                    }
-                }
-            }
-            catch (IOException)
-            {
-                Console.WriteLine("Problem when trying to read the file.");
-            }
-        }
-
-        public void AppendflightstoFile(string path)
-        {
-            using var writer = new StreamWriter(path, append: false);
-            using var csvWriter = new CsvWriter(writer, CultureInfo.InvariantCulture);
-
-            csvWriter.WriteRecords(_systemFlights);
-        }
-
     }
 }
