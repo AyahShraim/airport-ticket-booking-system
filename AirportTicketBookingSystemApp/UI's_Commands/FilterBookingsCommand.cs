@@ -5,7 +5,7 @@ using AirportTicketBookingSystemApp.Services.SearchService;
 
 namespace AirportTicketBookingSystemApp.Commands_UI
 {
-    public class FilterBookingsCommand : IManagerMenuCommands
+    public class FilterBookingsCommand : IMenuCommands
     {
         private FilteredSearch _filteredSearch;
         private List<FlightBookingModel> _bookings;

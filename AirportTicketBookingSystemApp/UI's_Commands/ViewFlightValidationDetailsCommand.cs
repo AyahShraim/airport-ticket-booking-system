@@ -4,7 +4,7 @@ using AirportTicketBookingSystemApp.Validators;
 
 namespace AirportTicketBookingSystemApp.UI_s_Commands
 {
-    internal class ViewFlightValidationDetailsCommand : IManagerMenuCommands
+    internal class ViewFlightValidationDetailsCommand : IMenuCommands
     {
         private FlightRepository _flightRepository;
         public ViewFlightValidationDetailsCommand()

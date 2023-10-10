@@ -1,6 +1,6 @@
 ﻿namespace AirportTicketBookingSystemApp.Interfaces
 {
-    public interface IManagerMenuCommands
+    internal interface IMenuCommands
     {
         void Execute();
     }

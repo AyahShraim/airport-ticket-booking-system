@@ -48,25 +48,27 @@ List<Flight> systemFlights = new List<Flight>();
 
 List<FlightBookingModel> bookings = new();
 
-Dictionary<PassengerMenuOptions, IPassengerMenuCommands> passengerMenuCommands = new();
+Dictionary<PassengerMenuOptions, IMenuCommands> passengerMenuCommands = new();
 
-Dictionary<ManagerMenuOptions, IManagerMenuCommands> managerMenuCommands = new();
+Dictionary<ManagerMenuOptions, IMenuCommands> managerMenuCommands = new();
 void CommandsInitilization()
 {
-    passengerMenuCommands = new Dictionary<PassengerMenuOptions, IPassengerMenuCommands>
+    passengerMenuCommands = new Dictionary<PassengerMenuOptions, IMenuCommands>
     {
           {PassengerMenuOptions.SearchFlight,new SearchFlightCommand(systemFlights)},
           {PassengerMenuOptions.BookFlight,new BookingFlightCommand(systemFlights,passengerAccountUI.CurrentPassenger)},
           {PassengerMenuOptions.ViewBookings,new ViewPersonalBookingsCommand(passengerAccountUI.CurrentPassenger,systemFlights)},
           {PassengerMenuOptions.EditBooking,new EditBookingCommand(systemFlights)},
-          {PassengerMenuOptions.CancelBooking,new CancelBookingCommand()}
+          {PassengerMenuOptions.CancelBooking,new CancelBookingCommand()},
+          {PassengerMenuOptions.Exit, new ExitCommand()}
     };
 
-    managerMenuCommands = new Dictionary<ManagerMenuOptions, IManagerMenuCommands>
+    managerMenuCommands = new Dictionary<ManagerMenuOptions, IMenuCommands>
     {
          {ManagerMenuOptions.FilterBookings,new FilterBookingsCommand(bookings, systemFlights)},
          {ManagerMenuOptions.UploadFlights,new UploadFlightsCommand()},
-         {ManagerMenuOptions.ViewFlightValidationDetails,new ViewFlightValidationDetailsCommand()}
+         {ManagerMenuOptions.ViewFlightValidationDetails,new ViewFlightValidationDetailsCommand()},
+         {ManagerMenuOptions.Exit, new ExitCommand()}
     };
 }
 void StartTickectBookingConsoleApp()

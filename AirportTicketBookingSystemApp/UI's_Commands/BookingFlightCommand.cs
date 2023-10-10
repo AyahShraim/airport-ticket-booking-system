@@ -8,7 +8,7 @@ using AirportTicketBookingSystemApp.Utilities;
 
 namespace AirportTicketBookingSystemApp.Commands_UI
 {
-    public class BookingFlightCommand : IPassengerMenuCommands
+    public class BookingFlightCommand : IMenuCommands
     {
         private List<Flight> _systemFlights;
         private PassengerServices passengerServices = new();

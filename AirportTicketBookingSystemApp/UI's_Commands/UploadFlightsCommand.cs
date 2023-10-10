@@ -3,7 +3,7 @@ using AirportTicketBookingSystemApp.Interfaces;
 
 namespace AirportTicketBookingSystemApp.Commands_UI
 {
-    public class UploadFlightsCommand : IManagerMenuCommands
+    public class UploadFlightsCommand : IMenuCommands
     {
         private FlightRepository _flightRepository;
         public UploadFlightsCommand()

@@ -5,7 +5,7 @@ using AirportTicketBookingSystemApp.Utilities;
 
 namespace AirportTicketBookingSystemApp.Commands_UI
 {
-    public class CancelBookingCommand : IPassengerMenuCommands
+    public class CancelBookingCommand : IMenuCommands
     {
         private BookingRepository _bookingRepository;
         public CancelBookingCommand()

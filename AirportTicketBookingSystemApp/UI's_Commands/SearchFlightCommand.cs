@@ -7,7 +7,7 @@ using System.Text;
 
 namespace AirportTicketBookingSystemApp.Commands_UI
 {
-    public class SearchFlightCommand : IPassengerMenuCommands
+    public class SearchFlightCommand : IMenuCommands
     {
         private List<Flight> _flights;
         private List<Flight> _systemFlights;
