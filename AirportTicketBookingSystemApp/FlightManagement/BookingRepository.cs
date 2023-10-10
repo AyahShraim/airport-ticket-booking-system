@@ -1,7 +1,6 @@
 ﻿using AirportTicketBookingSystemApp.ResultHandler;
 using AirportTicketBookingSystemApp.Utilities;
 using CsvHelper;
-
 using System.Globalization;
 
 namespace AirportTicketBookingSystemApp.FlightManagement
@@ -15,13 +14,10 @@ namespace AirportTicketBookingSystemApp.FlightManagement
         }
         public OperationResult AddNewBooking(FlightBookingModel flightBooking)
         {
-
             using var writer = new StreamWriter(PathsUtilities.bookingsFilePath, append: true);
             using var csvWriter = new CsvWriter(writer, CultureInfo.InvariantCulture);
-
             csvWriter.WriteRecord(flightBooking);
             csvWriter.NextRecord();
-
             return OperationResult.SuccessResult($"Booking set successfully!");
         }
         public List<FlightBookingModel> LoadBookings(string path)
@@ -44,25 +40,11 @@ namespace AirportTicketBookingSystemApp.FlightManagement
         }
         public List<FlightBookingModel> ReadBookingsByEmail(string passengerEmail)
         {
-            try
-            {
-                using (var reader = new StreamReader(PathsUtilities.bookingsFilePath))
-                {
-                    using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
-                    {
-                        _Bookings = csv.GetRecords<FlightBookingModel>()
-                            .Where(record => record.Email.Equals(passengerEmail))
-                            .ToList();
-                    }
-                }
-            }
-            catch (IOException)
-            {
-                Console.WriteLine("problem when trying to read the file");
-            }
-            return _Bookings;
+            var bookings = LoadBookings(PathsUtilities.bookingsFilePath);
+            return bookings
+            .Where(record => record.Email.Equals(passengerEmail))
+            .ToList();
         }
-
         public OperationResult DeleteBookingByBookingNo(string bookingNumber, List<FlightBookingModel> bookings)
         {
             int index = bookings.FindIndex(record => record.BookingNumber.Equals(bookingNumber));
@@ -72,6 +54,14 @@ namespace AirportTicketBookingSystemApp.FlightManagement
             bookings.RemoveAt(index);
             csvWriter.WriteRecords(bookings);
             return OperationResult.SuccessResult("Deleted succefully!");
+        }
+
+        public OperationResult UpdataBookingsRecords(List<FlightBookingModel> bookings)
+        {
+            using var writer = new StreamWriter(PathsUtilities.bookingsFilePath, append: false);
+            using var csvWriter = new CsvWriter(writer, CultureInfo.InvariantCulture);
+            csvWriter.WriteRecords(bookings);
+            return OperationResult.SuccessResult($"Booking updated successfully!");
         }
     }
 }

@@ -58,6 +58,7 @@ void CommandsInitilization()
           {PassengerMenuOptions.SearchFlight,new SearchFlightCommand(systemFlights)},
           {PassengerMenuOptions.BookFlight,new BookingFlightCommand(systemFlights,passengerAccountUI.CurrentPassenger)},
           {PassengerMenuOptions.ViewBookings,new ViewPersonalBookingsCommand(passengerAccountUI.CurrentPassenger,systemFlights)},
+          {PassengerMenuOptions.EditBooking,new EditBookingCommand(systemFlights)},
           {PassengerMenuOptions.CancelBooking,new CancelBookingCommand()}
     };
 
