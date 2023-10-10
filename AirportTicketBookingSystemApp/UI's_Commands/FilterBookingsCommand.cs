@@ -2,6 +2,7 @@
 using AirportTicketBookingSystemApp.FlightManagement;
 using AirportTicketBookingSystemApp.Interfaces;
 using AirportTicketBookingSystemApp.Services.SearchService;
+using AirportTicketBookingSystemApp.Utilities;
 
 namespace AirportTicketBookingSystemApp.Commands_UI
 {
@@ -16,19 +17,6 @@ namespace AirportTicketBookingSystemApp.Commands_UI
             _filteredSearch = new();
             _bookings = bookings;
             _systemFlights = flights;
-        }
-        void PrintFilterList()
-        {
-
-            Console.WriteLine("Choose one or more of those prameters to filter bookings");
-            Console.WriteLine(@"
-1.Departure Country         2.Arrival Country
-3.Departure Airport         4.Arrival Airport
-5.Departure Date            6.Class
-7.Price                     8.Person
-9.Flight                    0.Finish
-
-");
         }
         public void Execute()
         {
@@ -47,69 +35,75 @@ namespace AirportTicketBookingSystemApp.Commands_UI
                         break;
                     }
                     FilterBookingsKey searchKey = (FilterBookingsKey)selection;
-                    Console.WriteLine("enter value:");
-                    HandleUserSelection(searchKey, flightParameters, bookingsParameters);
+                    string value = Console.ReadLine() ?? String.Empty;
+                    HandleUserSelection(searchKey, flightParameters, bookingsParameters, value);
                 }
                 continue;
             }
-            FilteredBookings(flightParameters, bookingsParameters);
-            if (_bookings.Count == 0)
+            var filteredBookings = FilteredBookings(flightParameters, bookingsParameters);
+            if (filteredBookings.Count == 0)
             {
                 Console.WriteLine("no valid bookings");
             }
             else
             {
-                PrintBookings(_bookings);
+                PrintBookings(filteredBookings);
             }
         }
-
-        private void HandleUserSelection(FilterBookingsKey key, Dictionary<string, object> flightParameters, Dictionary<string, object> bookingsParameters)
+        void PrintFilterList()
         {
-            string stringValue = Console.ReadLine() ?? string.Empty;
+            Console.WriteLine("Choose one or more of those prameters to filter bookings");
+            Console.WriteLine(@"
+1.Departure Country         2.Arrival Country
+3.Departure Airport         4.Arrival Airport
+5.Departure Date            6.Class
+7.Price                     8.Person
+9.Flight                    0.Finish
+
+");
+        }
+        private void HandleUserSelection(FilterBookingsKey key, Dictionary<string, object> flightParameters, Dictionary<string, object> bookingsParameters, string value)
+        {
             if (key.Equals(FilterBookingsKey.ArrivalCountry) ||
                 key.Equals(FilterBookingsKey.DepartureCountry) ||
                 key.Equals(FilterBookingsKey.DepartureAirport) ||
-                key.Equals(FilterBookingsKey.ArrivalAirport)
-               )
+                key.Equals(FilterBookingsKey.ArrivalAirport))
             {
-                if (IsValidString(stringValue)) flightParameters.Add(key.ToString(), stringValue);
+                if (UserInputOutputUtilities.HandleStringInput(value)) flightParameters.Add(key.ToString(), value);
             }
-            if (key.Equals(FilterBookingsKey.DepartureDate))
+            else if (key.Equals(FilterBookingsKey.DepartureDate))
             {
-                DateTime departureDate = new DateTime().Date;
-                if (DateTime.TryParse(stringValue, out departureDate))
-                    flightParameters.Add(key.ToString(), departureDate.Date);
+                DateTime? departureDate = UserInputOutputUtilities.HandleDateInput(value);
+                if (departureDate != null) flightParameters.Add(key.ToString(), departureDate);
             }
-            if (key.Equals(FilterBookingsKey.Email) ||
-               key.Equals(FilterBookingsKey.BookingClass)
-               )
+            else if (key.Equals(FilterBookingsKey.Email))
             {
-                if (IsValidString(stringValue)) bookingsParameters.Add(key.ToString(), stringValue);
+                if (UserInputOutputUtilities.HandleStringInput(value)) bookingsParameters.Add(key.ToString(), value);
             }
-            if (key.Equals(FilterBookingsKey.BookingPrice))
+            else if(key.Equals(FilterBookingsKey.BookingClass))
             {
-                double value;
-                if (double.TryParse(stringValue, out value)) bookingsParameters.Add(key.ToString(), value);
+                FlightClassType? classType = UserInputOutputUtilities.HandleClassInput();
+                if (classType != null) bookingsParameters.Add(key.ToString(), classType);
             }
-            if (key.Equals(FilterBookingsKey.FlightNumber))
+            else if (key.Equals(FilterBookingsKey.BookingPrice))
             {
-                int value;
-                if (int.TryParse(stringValue, out value)) bookingsParameters.Add(key.ToString(), value);
+                double? price = UserInputOutputUtilities.HandleDoubleInput(value);
+                if (price != null) bookingsParameters.Add(key.ToString(), price);
+            }
+            else if (key.Equals(FilterBookingsKey.FlightNumber))
+            {
+                int? flightNumber = UserInputOutputUtilities.HandleIntInput(value);
+                if (flightNumber != null ) bookingsParameters.Add(key.ToString(), flightNumber);
             }
         }
-        private bool IsValidString(string text)
-        {
-            return !string.IsNullOrEmpty(text);
-        }
-
-        private void FilteredBookings(Dictionary<string, object> flightParameters, Dictionary<string, object> bookingsParameters)
+        private List<FlightBookingModel> FilteredBookings(Dictionary<string, object> flightParameters, Dictionary<string, object> bookingsParameters)
         {
             List<Flight> flights = new();
             if (flightParameters.Count > 0)
             {
                 flights = _filteredSearch.SearchFlight(_systemFlights, flightParameters);
             }
-            _bookings = _filteredSearch.SearchBookings(_bookings, flights, bookingsParameters);
+            return  _filteredSearch.SearchBookings(_bookings, flights, bookingsParameters);
         }
 
         private void PrintBookings(List<FlightBookingModel> flightBookings)

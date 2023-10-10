@@ -75,7 +75,7 @@ namespace AirportTicketBookingSystemApp.Services.SearchService
 
             if (IsKey("BookingClass"))
             {
-                searchCriteria.Add(new BookingClassFilter((string)parameters["BookingClass"]));
+                searchCriteria.Add(new BookingClassFilter((FlightClassType)parameters["BookingClass"]));
             }
             if(IsKey("BookingPrice"))
             {

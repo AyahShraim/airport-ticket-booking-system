@@ -1,4 +1,5 @@
-﻿using AirportTicketBookingSystemApp.FlightManagement;
+﻿using AirportTicketBookingSystemApp.Enums;
+using AirportTicketBookingSystemApp.FlightManagement;
 using AirportTicketBookingSystemApp.Interfaces;
 
 
@@ -6,8 +7,8 @@ namespace AirportTicketBookingSystemApp.Services.SearchService.SearchFilter
 {
     public class BookingClassFilter : ISearchCriteria<FlightBookingModel>
     {
-        private string _class;
-        public BookingClassFilter(string bookedClass)
+        private FlightClassType _class;
+        public BookingClassFilter(FlightClassType bookedClass)
         {
             _class = bookedClass;
         }

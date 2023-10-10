@@ -117,8 +117,8 @@ void HandleMainMenuSelection()
                 break;
 
             case MainMenuOptions.Exit:
+                Environment.Exit(0);
                 break;
-
             default:
                 break;
         }
