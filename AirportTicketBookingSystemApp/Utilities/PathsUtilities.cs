@@ -1,6 +1,6 @@
-﻿namespace AirportTicketBookingSystemApp
+﻿namespace AirportTicketBookingSystemApp.Utilities
 {
-    public class Utilities
+    public class PathsUtilities
     {
         private const string _RootDiectory = @"C:\Users\DELL\source\repos\AirportTicketBookingSystem\AirportTicketBookingSystemApp\Data\";
         private const string _systemFlightFile = "system_flights.csv";

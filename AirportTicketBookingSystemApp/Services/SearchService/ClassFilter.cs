@@ -7,27 +7,16 @@ namespace AirportTicketBookingSystemApp.Services.SearchService
     public class ClassFilter : ISearchCriteria<Flight>
     {
         private FlightClassType _class;
+        private FlightServices _flightServices;
         public ClassFilter(FlightClassType flightClass)
         {
             _class = flightClass;
+            _flightServices = new();
         }
 
         public bool ApplyFilter(Flight flight)
         {
-            if (_class.Equals(FlightClassType.Business))
-            {
-                return flight.BusinessAvailable > 0;
-            }
-            else if (_class.Equals(FlightClassType.Economy))
-            {
-                return flight.EconomiyAvailable > 0;
-            }
-            else if (_class.Equals(FlightClassType.FirstClass))
-            {
-                return flight.FirstClassAvailable > 0;
-            }
-
-            return false;
+            return _flightServices.FlightClassSeatAvailable(flight, _class);
         }
     }
 }

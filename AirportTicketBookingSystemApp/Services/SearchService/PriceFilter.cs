@@ -6,34 +6,19 @@ namespace AirportTicketBookingSystemApp.Services.SearchService
 {
     public class PriceFilter : ISearchCriteria<Flight>
     {
- 
         private FlightClassType _classType;
+        private FlightServices _flightServices;
         private double _maxPrice;
         public PriceFilter(double maxprice, FlightClassType classType)
         {
             _classType = classType;
             _maxPrice = maxprice;
+            _flightServices = new();
         }
 
         public bool ApplyFilter(Flight flight)
         {
-            bool isValid = false;
-            switch (_classType)
-            {
-                case FlightClassType.Business:
-                    isValid = flight.BusinessPrice <= _maxPrice;
-                    break;
-
-                case FlightClassType.Economy:
-                    isValid = flight.EconomiyPrice <= _maxPrice;
-                    break;
-
-                case FlightClassType.FirstClass:
-                    isValid = flight.FirstClassPrice<= _maxPrice;
-                    break;
-            }
-            return isValid;
+            return _flightServices.FlightPrice(flight, _classType) <= _maxPrice;
         }
     }
 }
-

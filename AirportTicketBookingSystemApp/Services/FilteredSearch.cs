@@ -48,7 +48,7 @@ namespace AirportTicketBookingSystemApp.Services.SearchService
 
             if (IsKey("MaxPrice"))
             {
-                searchCriteria.Add(new PriceFilter((double)parameters["Price"], (FlightClassType)parameters["Class"]));
+                searchCriteria.Add(new PriceFilter((double)parameters["MaxPrice"], (FlightClassType)parameters["Class"]));
             }
             
             return searchCriteria;
@@ -88,13 +88,14 @@ namespace AirportTicketBookingSystemApp.Services.SearchService
         public List<Flight> SearchFlight(List<Flight> items, Dictionary<string, object> parameters)
         {
             List<ISearchCriteria<Flight>> searchCriterias = FlightSearchCriteria(parameters);
-            List<Flight> filteredItems = new List<Flight>(items);
-            filteredItems = items.Where(item => searchCriterias.All(criteria => criteria.ApplyFilter(item))).ToList();
+            List<Flight> filteredItems =
+                items.
+                Where(item => searchCriterias.All(criteria => criteria.ApplyFilter(item)))
+               .ToList();
             return filteredItems;
         }
         public List<FlightBookingModel> SearchBookings(List<FlightBookingModel> bookings,List<Flight> filteredFlights, Dictionary<string, object> parameters)
         {
-           
             List<ISearchCriteria<FlightBookingModel>> bookingSearchCriteria = BookingSearchCriteria(parameters);
             List<FlightBookingModel> filteredItems = new List<FlightBookingModel>(bookings);
             if(filteredFlights.Count>0)

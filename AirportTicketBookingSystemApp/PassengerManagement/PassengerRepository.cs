@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using AirportTicketBookingSystemApp.ResultHandler;
+using AirportTicketBookingSystemApp.Utilities;
 using CsvHelper;
 
 
@@ -13,7 +14,7 @@ namespace AirportTicketBookingSystemApp.PassengerManagement
             {
                 return OperationResult.FailureResult("email already exist, try different email or login!");
             }
-            using var writer = new StreamWriter(Utilities.UsersFilePath, append: true);
+            using var writer = new StreamWriter(PathsUtilities.UsersFilePath, append: true);
             using var csvWriter = new CsvWriter(writer, CultureInfo.InvariantCulture);
             csvWriter.WriteRecord(passenger);
             csvWriter.NextRecord();
@@ -22,7 +23,7 @@ namespace AirportTicketBookingSystemApp.PassengerManagement
 
         private bool IsExistPassenger(string email)
         {
-            using (var reader = new StreamReader(Utilities.UsersFilePath))
+            using (var reader = new StreamReader(PathsUtilities.UsersFilePath))
             {
                 using var csvReader = new CsvReader(reader, CultureInfo.InvariantCulture);
                 return csvReader
@@ -33,7 +34,7 @@ namespace AirportTicketBookingSystemApp.PassengerManagement
         }
         public OperationResult CheckPassengerInfo(string email, string password)
         {
-            using (var reader = new StreamReader(Utilities.UsersFilePath))
+            using (var reader = new StreamReader(PathsUtilities.UsersFilePath))
             {
                 using var csvReader = new CsvReader(reader, CultureInfo.InvariantCulture);
                 var passenger = csvReader

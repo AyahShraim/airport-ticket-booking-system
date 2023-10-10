@@ -1,23 +1,19 @@
-﻿using AirportTicketBookingSystemApp;
-using AirportTicketBookingSystemApp.Commands_UI;
+﻿using AirportTicketBookingSystemApp.Commands_UI;
 using AirportTicketBookingSystemApp.Enums;
 using AirportTicketBookingSystemApp.FlightManagement;
 using AirportTicketBookingSystemApp.Interfaces;
 using AirportTicketBookingSystemApp.PassengerManagement;
 using AirportTicketBookingSystemApp.UI_s_Commands;
+using AirportTicketBookingSystemApp.Utilities;
 
 PrintWelcome();
-
-List<Flight> systemFlights = new List<Flight>();
-FlightRepository flightRepository = new FlightRepository();
-List<FlightBookingModel> bookings = new();
-Dictionary<PassengerMenuOptions, IPassengerMenuCommands> passengerMenuCommands = new();
-Dictionary<ManagerMenuOptions, IManagerMenuCommands> ManagerMenuCommands = new();
 PassengerAccountUI passengerAccountUI = new();
 StartTickectBookingConsoleApp();
 
 void Initilization()
 {
+
+    FlightRepository flightRepository = new FlightRepository();
     LoadSystemFlightsync(flightRepository);
     LoadSystemBookings();
     CommandsInitilization();
@@ -47,6 +43,14 @@ void PrintWelcome()
     Console.ReadLine();
     Console.Clear();
 }
+
+List<Flight> systemFlights = new List<Flight>();
+
+List<FlightBookingModel> bookings = new();
+
+Dictionary<PassengerMenuOptions, IPassengerMenuCommands> passengerMenuCommands = new();
+
+Dictionary<ManagerMenuOptions, IManagerMenuCommands> managerMenuCommands = new();
 void CommandsInitilization()
 {
     passengerMenuCommands = new Dictionary<PassengerMenuOptions, IPassengerMenuCommands>
@@ -57,7 +61,7 @@ void CommandsInitilization()
           {PassengerMenuOptions.CancelBooking,new CancelBookingCommand()}
     };
 
-    ManagerMenuCommands = new Dictionary<ManagerMenuOptions, IManagerMenuCommands>
+    managerMenuCommands = new Dictionary<ManagerMenuOptions, IManagerMenuCommands>
     {
          {ManagerMenuOptions.FilterBookings,new FilterBookingsCommand(bookings, systemFlights)},
          {ManagerMenuOptions.UploadFlights,new UploadFlightsCommand()},
@@ -125,8 +129,7 @@ void HandleMainMenuSelection()
 }
 void LoadSystemFlightsync(FlightRepository flightRepository)
 {
-    flightRepository.LoadFlights(Utilities.SystemFlightsPath);
-    systemFlights = flightRepository.SystemFlights;
+    systemFlights = flightRepository.LoadFlights(PathsUtilities.SystemFlightsPath);
 }
 void StartPssengerServicesConsole(Passenger currentPassenger)
 {
@@ -180,7 +183,7 @@ void StartManagerServices()
 {
     Console.WriteLine("enter your secret key");
     string secretKey = Console.ReadLine() ?? string.Empty;
-    if (!secretKey.Equals(Utilities.SecretKey))
+    if (!secretKey.Equals(PathsUtilities.SecretKey))
     {
         Console.WriteLine("not valid secret key");
         return;
@@ -215,7 +218,7 @@ void HandleManagerMenuSelection()
         ManagerMenuOptions selected = (ManagerMenuOptions)selection;
         try
         {
-            ManagerMenuCommands[selected].Execute();
+            managerMenuCommands[selected].Execute();
         }
         catch
         {
@@ -232,9 +235,8 @@ void HandleManagerMenuSelection()
         PrintManagerMenuOptions();
     }
 }
-
 void LoadSystemBookings()
 {
     BookingRepository bookingRepository = new();
-    bookings = bookingRepository.LoadBookings(Utilities.bookingsFilePath);
+    bookings = bookingRepository.LoadBookings(PathsUtilities.bookingsFilePath);
 }

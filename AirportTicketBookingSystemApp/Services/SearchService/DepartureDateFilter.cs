@@ -13,7 +13,7 @@ namespace AirportTicketBookingSystemApp.Services.SearchService
 
         public bool ApplyFilter(Flight flight)
         {
-            return flight.DepartureDate.Date== _depatureDate;
+            return flight.DepartureDate.Date == _depatureDate;
         }
     }
 }

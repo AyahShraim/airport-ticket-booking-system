@@ -1,5 +1,6 @@
 ﻿using AirportTicketBookingSystemApp.Enums;
 using AirportTicketBookingSystemApp.ResultHandler;
+using AirportTicketBookingSystemApp.Utilities;
 using CsvHelper;
 using CsvHelper.TypeConversion;
 using System.Globalization;
@@ -16,7 +17,7 @@ namespace AirportTicketBookingSystemApp.FlightManagement
         }
         public OperationResult BatchFileUpload(string path)
         {
-            var systemFlights = LoadFlights(Utilities.SystemFlightsPath);
+            var systemFlights = LoadFlights(PathsUtilities.SystemFlightsPath);
             List<Flight> uploadedFlights;
             string validationErrors = "";
             try
@@ -33,7 +34,7 @@ namespace AirportTicketBookingSystemApp.FlightManagement
                             item.Number = maxFlightCount++;
                         }
                         systemFlights.AddRange(uploadedFlights.ToList());
-                        SaveNewFlightsToSystem(Utilities.SystemFlightsPath, systemFlights);
+                        SaveNewFlightsToSystem(PathsUtilities.SystemFlightsPath, systemFlights);
                         return OperationResult.SuccessResult("flights added successfully");
                     }
                 }
@@ -88,7 +89,7 @@ namespace AirportTicketBookingSystemApp.FlightManagement
                     _systemFlights[flightIndex].BusinessAvailable--;
                     break;
             }
-            SaveNewFlightsToSystem(Utilities.SystemFlightsPath, flights);
+            SaveNewFlightsToSystem(PathsUtilities.SystemFlightsPath, flights);
         }
     }
 }

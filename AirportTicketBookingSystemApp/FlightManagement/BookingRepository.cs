@@ -1,4 +1,5 @@
 ﻿using AirportTicketBookingSystemApp.ResultHandler;
+using AirportTicketBookingSystemApp.Utilities;
 using CsvHelper;
 
 using System.Globalization;
@@ -15,7 +16,7 @@ namespace AirportTicketBookingSystemApp.FlightManagement
         public OperationResult AddNewBooking(FlightBookingModel flightBooking)
         {
 
-            using var writer = new StreamWriter(Utilities.bookingsFilePath, append: true);
+            using var writer = new StreamWriter(PathsUtilities.bookingsFilePath, append: true);
             using var csvWriter = new CsvWriter(writer, CultureInfo.InvariantCulture);
 
             csvWriter.WriteRecord(flightBooking);
@@ -45,7 +46,7 @@ namespace AirportTicketBookingSystemApp.FlightManagement
         {
             try
             {
-                using (var reader = new StreamReader(Utilities.bookingsFilePath))
+                using (var reader = new StreamReader(PathsUtilities.bookingsFilePath))
                 {
                     using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
                     {
@@ -66,7 +67,7 @@ namespace AirportTicketBookingSystemApp.FlightManagement
         {
             int index = bookings.FindIndex(record => record.BookingNumber.Equals(bookingNumber));
             if (index == -1) return OperationResult.FailureResult("No such booking!");
-            using var writer = new StreamWriter(Utilities.bookingsFilePath);
+            using var writer = new StreamWriter(PathsUtilities.bookingsFilePath);
             using var csvWriter = new CsvWriter(writer, CultureInfo.InvariantCulture);
             bookings.RemoveAt(index);
             csvWriter.WriteRecords(bookings);
