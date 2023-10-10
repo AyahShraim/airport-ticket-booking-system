@@ -80,13 +80,13 @@ namespace AirportTicketBookingSystemApp.FlightManagement
             switch (flightClass)
             {
                 case FlightClassType.FirstClass:
-                    _systemFlights[flightIndex].FirstClassAvailable--;
+                    flights[flightIndex].FirstClassAvailable--;
                     break;
                 case FlightClassType.Economy:
-                    _systemFlights[flightIndex].EconomiyAvailable--;
+                    flights[flightIndex].EconomiyAvailable--;
                     break;
                 case FlightClassType.Business:
-                    _systemFlights[flightIndex].BusinessAvailable--;
+                    flights[flightIndex].BusinessAvailable--;
                     break;
             }
             SaveNewFlightsToSystem(PathsUtilities.SystemFlightsPath, flights);

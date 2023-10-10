@@ -27,10 +27,8 @@ namespace AirportTicketBookingSystemApp.PassengerManagement
             {
                 return OperationResult.FailureResult("\nNo Availabe seats");
             }
-
             FlightBookingModel flightBookingModel = new(flight.Number, email, flightClassType, price, flight.Currency, FlightBookingModel.GenerateBookingNumber());
             _bookingRepository.AddNewBooking(flightBookingModel);
-          //  _flightRepository.DecreaseAvailableSeats(flight.Number, flightClassType, );
             return OperationResult.SuccessDataMessage("\nyour booking set succefully! ", flightBookingModel.BookingNumber);
         }
     }
