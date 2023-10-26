@@ -1,49 +1,46 @@
-# Real-time Weather Monitoring and Reporting Service
+# Airport Ticket Booking System
 
 ## Table of Contents
 
 - [Overview](#overview)
 - [Features](#features)
-  - [Supported Formats](#supported-formats)
-  - [Weather Bots](#weather-bots)
-- [Configuration](#configuration)
-- [Example Interaction](#example-interaction)
-- [Flowchart](#flowchart)
-- [Additional Notes](#additional-notes)
+  - [For the Passenger](#for-the-passenger)
+  - [For the Manager](#for-the-manager)
+- [Contact](#contact)
 
 ## Overview
 
-This C# console application simulates a real-time weather monitoring and reporting service. It receives and processes weather data in JSON and XML formats from various weather stations.
+The Airport Ticket Booking Exercise is a C# project that simulates a ticket booking system for both passengers and managers. It offers various features for passengers to book flights, search for available flights, and manage their bookings. Managers have additional features like filtering bookings and importing flight data from CSV files.
 
 ## Features
 
-### Supported Formats
+### For the Passenger
 
-- JSON: Example format provided.
-- XML: Example format provided.
+1. **Book a Flight:**
+2. **Search for Available Flights with different parameters**
+3. **Manage Bookings:**
+   - Cancel a booking
+   - Modify a booking
+   - View personal bookings
 
-### Weather Bots
+### For the Manager
 
-- RainBot: Activated when humidity exceeds a threshold.
-- SunBot: Activated when temperature rises above a threshold.
-- SnowBot: Activated when temperature drops below a threshold.
-
-## Configuration
-
-- Bots are configured via a JSON file.
-- Settings include enable/disable, thresholds, and activation messages.
-
-## Example Interaction
-
-1. User inputs weather data in JSON or XML format.
-2. Weather bots respond based on data and configurations.
-
-## Flowchart
-
-![DPExcercise](https://github.com/AyahShraim/airport-ticket-booking-system/assets/73714621/ec1a512a-d1c7-473a-bc08-d4c9aca3780b)
+1. **Filter Bookings with different parameters**
+2. **Uplad/validate Flights**
+3. **Get dynamic model validation details for flights**
 
 
-## Additional Notes
+## Usage
 
-- Utilizes Observer and Strategy design patterns.
-- Supports adding new bot types and data formats with minimal code changes.
+To use the Airport Ticket Booking Exercise:
+
+1. Clone this repository.
+2. Update paths inside the Utilities/PathUtilities class
+3. Build the project
+
+## Contact
+
+If you have any questions, feedback, or suggestions, please feel free to contact me:
+
+- [Ayah Shraim]
+- Email: [ayahshraim558@gmail.com]
