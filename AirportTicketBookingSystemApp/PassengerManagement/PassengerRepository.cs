@@ -6,7 +6,7 @@ using CsvHelper;
 
 namespace AirportTicketBookingSystemApp.PassengerManagement
 {
-    internal class PassengerRepository
+    public class PassengerRepository
     {
         public OperationResult AddNewPassenger(Passenger passenger)
         {
@@ -20,7 +20,6 @@ namespace AirportTicketBookingSystemApp.PassengerManagement
             csvWriter.NextRecord();
             return OperationResult.SuccessResult("Account created successfully!");
         }
-
         private bool IsExistPassenger(string email)
         {
             using (var reader = new StreamReader(PathsUtilities.UsersFilePath))
